@@ -66,10 +66,6 @@ int		key_released(int key)
 			player.move_direction = 0;
 			player.side_ang = 0;
 	}
-	else if (key == KEY_RIGHT)
-			player.direction = 0;
-	else if (key == KEY_LEFT)
-			player.direction = 0;
 	return (0);
 }
 

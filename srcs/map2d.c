@@ -12,7 +12,7 @@
 
 #include "../includes/cube3d.h"
 
-void    make_map2d()
+void    tile_size()
 {
 	int	i;
 	int	j;
@@ -22,10 +22,9 @@ void    make_map2d()
 	data.tile_size = i > j ? j : i;
 	data.mapd_w = data.tile_size * data.map_width;
 	data.mapd_h = data.tile_size * data.map_height;
-	make__map2d();
 }
 
-void    make__map2d()
+void    make_map2d()
 {
 	data.y = 0;
 	while (data.world[data.y])
@@ -38,7 +37,6 @@ void    make__map2d()
 			colored_square(data.tile_size, data.x * data.tile_size, data.y * data.tile_size, get_color(0, 0, 0));
 			data.x++;
 		}
-		puts("\n");
 		data.y++;
 	}
 }

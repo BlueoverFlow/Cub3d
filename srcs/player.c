@@ -48,6 +48,5 @@ int    charactere()
 		return (0);
 	player.x = (data.x * data.tile_size + (data.tile_size / 2));
 	player.y = (data.y * data.tile_size + (data.tile_size / 2));
-	print_circle(player.x, player.y, player.scale, get_color(255, 0, 0));
 	return (1);
 }

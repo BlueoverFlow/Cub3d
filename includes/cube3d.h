@@ -172,8 +172,8 @@ char    is_border(int k, int j);
 int		map_parsing(int k, int j);
 
 //======================= map2d.c ================= 
+void    tile_size();
 void    make_map2d();
-void    make__map2d();
 void    init_player();
 int     find_p();
 

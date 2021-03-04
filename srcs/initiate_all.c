@@ -46,6 +46,7 @@ void    init_player()
 void	sub_init()
 {
 	get_world();
+	tile_size();
 	make_img();
 	init_player();
 	find_p();
