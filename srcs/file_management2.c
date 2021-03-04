@@ -14,22 +14,22 @@
 
 void	get_mapwidth()
 {
-	int w[data->map_height];
+	int w[data.map_height];
 	int len;
 	int j;
 	int k;
 
-	k = data->map_height + 1;
+	k = data.map_height + 1;
 	j = 0;
-	len = (int )ft_strlen(data->map[j]);
+	len = (int )ft_strlen(data.map[j]);
 	while (--k)
 	{
-		w[j] = (int )ft_strlen(data->map[j]);
+		w[j] = (int )ft_strlen(data.map[j]);
 		if (len <= w[j])
 			len = w[j];
 		j++;
 	}
-	data->map_width = len;
+	data.map_width = len;
 }
 
 void	get_world()
@@ -37,18 +37,18 @@ void	get_world()
 	int j;
 	int k;
 
-	k = data->map_height;
-	data->world = malloc(sizeof(char *) * data->map_height + 1);
-	data->world[data->map_height] = NULL;
+	k = data.map_height;
+	data.world = malloc(sizeof(char *) * data.map_height + 1);
+	data.world[data.map_height] = NULL;
 	while(k--)
 	{
 		j = -1;
-		data->world[k] = ft_calloc(data->map_width + 1, sizeof(char));
-		while (data->map[k][++j])
-			data->world[k][j] = data->map[k][j] == ' ' ? '0' : data->map[k][j];
-		while (j < data->map_width)
+		data.world[k] = ft_calloc(data.map_width + 1, sizeof(char));
+		while (data.map[k][++j])
+			data.world[k][j] = data.map[k][j] == ' ' ? '0' : data.map[k][j];
+		while (j < data.map_width)
 		{
-			data->world[k][j] = '0';
+			data.world[k][j] = '0';
 			j++;
 		}
 	}

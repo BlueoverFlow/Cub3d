@@ -26,17 +26,17 @@ void	read_elements()
 	int     i;
 
 	i = 0;
-	fd = open(file->file, O_RDONLY);
+	fd = open(file.file, O_RDONLY);
 	while (i < 8)
 	{
 		if (get_next_line(fd, &line) > 0)
 		{ 
 			if ((ft_split(line, ' ')) && *line != '\0' && *line != '\n')
 			{
-				file->elem[i] = ft_strdup(line);
+				file.elem[i] = ft_strdup(line);
 				i++;
 			}
-			file->map_pos++;
+			file.map_pos++;
 			free(line);
 		}
 		else
@@ -59,16 +59,16 @@ void	the9th_elem(char *line, int fd)
 		{
 			if (**check == '1' || **check == '0' || ** check == '2')
 			{
-				data->map_height++;
+				data.map_height++;
 				while (get_next_line(fd, &line) > 0)
 				{
-					data->map_height++;
+					data.map_height++;
 					free(line);
 				}
 				break;
 			}
 		}
-		file->map_pos++;
+		file.map_pos++;
 		free(line);
 	}
 	close (fd);
@@ -81,24 +81,24 @@ void	read_map()
 	int     j;
 
 	j = 0;
-	if (data->map_height > 0)
+	if (data.map_height > 0)
 	{
-		data->map = malloc((sizeof(char *) * data->map_height) + 1);
-		data->map[data->map_height] = NULL;
+		data.map = malloc((sizeof(char *) * data.map_height) + 1);
+		data.map[data.map_height] = NULL;
 	}
-	fd = open(file->file, O_RDONLY);
-	while (--file->map_pos)
+	fd = open(file.file, O_RDONLY);
+	while (--file.map_pos)
 	{
 		get_next_line(fd, &line);
 		free(line);
 	}
 	while (get_next_line(fd, &line) > 0)
 	{
-		data->map[j] = ft_strdup(line);
+		data.map[j] = ft_strdup(line);
 		free(line);
 		j++;
 	}
-	data->map[j] = ft_strdup(line);
+	data.map[j] = ft_strdup(line);
 	free(line);
 	close (fd);
 }

@@ -130,6 +130,7 @@ int     supreme_init(int argc, char **argv);
 //======================= initiate_all.c ==================
 int		supreme_init(int argc, char **argv);
 void 	var_init();
+void	sub_init();
 
 //============== error_management.c ===============
 int     check_err();
@@ -163,7 +164,7 @@ void	read_map();
 void	get_mapwidth();
 void	get_world();
 
-//======================= file_management3.c ======
+//======================= elements_handling.c ======
 int		handle_r();
 char	**find_id(char	*id);
 int		handle_map();
@@ -177,11 +178,8 @@ void    init_player();
 int     find_p();
 
 //======================= Player.c ================
-void    charactere();
-void    move_player();
-int     key_pressed(int key);
-int     key_released(int key);
-int     update();
+int    find_p();
+int    charactere();
 
 //======================= rays.c ==================
 static t_grides     ver_intercept(t_ray *rays);
@@ -194,14 +192,20 @@ void static         rays_init(t_ray *rays);
 void    cast_walls();
 void    ft_wall(int w_top, int w_bottom, int w_height, int index);
 
+//======================= game.c ===================
+void    move_player();
+int     key_pressed(int key);
+int		key_released(int key);
+int		update();
 
 
 
 
-t_cube          *data;
-t_player        *player;
-t_file          *file;
-t_image         *draw;
+
+t_cube          data;
+t_player        player;
+t_file          file;
+t_image         draw;
 t_image         *draw2;
 int             g_is_pressed;
 t_ray           *g_rays;

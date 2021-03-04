@@ -16,13 +16,14 @@ FLAGS =
 
 SRCS = 	file_management.c	\
 		file_management2.c	\
-		file_management3.c	\
+		elements_handling.c	\
 		main.c				\
 		error_management.c	\
 		initiate_all.c		\
 		utils.c				\
 		map2d.c				\
 		rays.c				\
+		game.c				\
 		walls.c				\
 		player.c
 

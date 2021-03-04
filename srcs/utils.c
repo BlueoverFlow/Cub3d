@@ -23,7 +23,7 @@ void            colored_square(int scale, int x, int y, int color)
 	{
 		while(y1 < (y + scale))
 		{
-			my_mlx_pixel_put(draw, x1, y1, color);
+			my_mlx_pixel_put(&draw, x1, y1, color);
 			y1++;
 		}
 		y1 = y;
@@ -47,7 +47,7 @@ void            print_circle(int x, int y, int r, int color)
     {
         while (ang < 360)
         {
-            my_mlx_pixel_put(draw, (r * cosf(ang * M_PI / 180) + x), (r * sinf(ang * M_PI / 180)+ y), color);
+            my_mlx_pixel_put(&draw, (r * cosf(ang * M_PI / 180) + x), (r * sinf(ang * M_PI / 180)+ y), color);
             ang++;
         }
         ang = ang_save;
@@ -61,7 +61,7 @@ void            draw_line(int l, int x, int y, float ang, int color)
 
     l0 = -1;
     while (--l >= 0)
-            my_mlx_pixel_put(draw, (l * cosf(ang)) + x, (l * sinf(ang)) + y, color);
+            my_mlx_pixel_put(&draw, (l * cosf(ang)) + x, (l * sinf(ang)) + y, color);
 }
 
 float           radian(float angle)
@@ -79,7 +79,7 @@ void    my_mlx_pixel_put(t_image *image, int x, int y, int color)
 
 float      norm_angle(float angle)
 {
-    while (angle <= -(2 * M_PI))
+    while (angle <= 0.0F)
         angle += (2 * M_PI);
     while (angle >= (2 * M_PI))
         angle -= (2 * M_PI);
@@ -88,7 +88,7 @@ float      norm_angle(float angle)
 
 float       distanceAB(float Ax, float Ay)
 {
-    return (sqrt(powf(Ax - player->x, 2) + powf(Ay - player->y, 2)));
+    return (sqrt(powf(Ax - player.x, 2) + powf(Ay - player.y, 2)));
 }
 
 int     theres_wall(float x, float y)
@@ -96,12 +96,12 @@ int     theres_wall(float x, float y)
     float     grid_x;
     float     grid_y;
 
-    if (!(x <= data->window_width &&
-        x >= 0 && y <= data->window_height && y >= 0))
+    if (!(x <= data.window_width &&
+        x >= 0 && y <= data.window_height && y >= 0))
         return (1);
-    grid_x = floor(x / data->tile_size);
-    grid_y = floor(y / data->tile_size);
-    return (data->world[(int)grid_y][(int)grid_x] == '1' ? 1 : 0);
+    grid_x = floor(x / data.tile_size);
+    grid_y = floor(y / data.tile_size);
+    return (data.world[(int)grid_y][(int)grid_x] == '1' ? 1 : 0);
 }
 
 int     out(char *error_msg)
@@ -110,13 +110,6 @@ int     out(char *error_msg)
 	exit (0);
     return (-1);
 }
-
-// for (int i = 0; data->world[i]; i++)
-// {
-//     for (int j = 0; data->world[i][j]; j++)
-//         printf("%c", data->world[i][j]);
-//     printf("\n");
-// }
 
 int		ft_strcmp(char *s1, char *s2)
 {
