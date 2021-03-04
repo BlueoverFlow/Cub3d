@@ -22,7 +22,7 @@ void    charactere()
                 player->rot_ang = radian(90);
         else if (data->world[data->y][data->x] == 'E')
                 player->rot_ang = radian(0);
-        print_circle(player->x, player->y, player->scale, get_color(255, 0, 0));
+        // print_circle(player->x, player->y, player->scale, get_color(255, 0, 0));
 }
 
 void    move_player()
@@ -38,7 +38,6 @@ void    move_player()
                 player->x = x;
         if (!theres_wall(player->x, y))
                 player->y = y;
-        // cast_walls();
 }
 
 int     key_pressed(int key)
@@ -85,14 +84,18 @@ int     key_released(int key)
 
 int     update(void)
 {
-        mlx_destroy_image(data->mlx_ptr, draw->img);
-        // mlx_clear_window(data->mlx_ptr, data->win_ptr);
-        draw->img = mlx_new_image(data->mlx_ptr, data->window_width, data->window_height);
-		draw->addr = mlx_get_data_addr(draw->img, &draw->bits_per_pixel, &draw->line_length, &draw->endian);
-        make_map2d();
-        move_player();
-		cast_rays();
-        print_circle(player->x, player->y, player->scale, get_color(255, 0, 0));
-        mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, draw->img, 0, 0);
-        return (0);
+    make_map2d();
+	move_player();
+	// print_circle(player->x, player->y, player->scale, get_color(255, 0, 0));
+	cast_rays();
+	cast_walls();
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, g_img_3d, 0, 0);
+	return (0);
+}
+
+void	sub_init()
+{
+	g_north = mlx_xpm_file_to_image(data->mlx_ptr, draw->north, &g_dimens[0].w, &g_dimens[0].h);
+	g_draw
+
 }

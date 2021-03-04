@@ -18,6 +18,7 @@ void    make_map2d()
 	int	j;
 
 	get_world();
+	find_p();
 	i = data->window_width / data->map_width;
 	j = data->window_height / data->map_height;
 	data->tile_size = i > j ? j : i;
@@ -26,31 +27,28 @@ void    make_map2d()
 	// else
 	// 	data->tile_size = i ;
         // data->tile_size *= 0.2;
-        data->mapd_w = data->tile_size * data->map_width;
-        data->mapd_h = data->tile_size * data->map_height;
-	make__map2d();
+	data->mapd_w = data->tile_size * data->map_width;
+	data->mapd_h = data->tile_size * data->map_height;
+	// make__map2d();
 }
 
-void    make__map2d()
-{
-	data->y = 0;
-	player->pix_y = 0;
-	while (data->world[data->y])
-	{
-		data->x = 0;
-		player->pix_x = 0;
-		while (data->world[data->y][data->x])
-		{
-                        data->world[data->y][data->x] == '1' ?
-                        colored_square(data->tile_size, player->pix_x, player->pix_y, get_color(0, 0, 255)) :
-                        colored_square(data->tile_size, player->pix_x, player->pix_y, get_color(0, 0, 0));
-			data->x++;
-			player->pix_x += data->tile_size;
-		}
-		data->y++;
-		player->pix_y += data->tile_size;
-	}
-}
+// void    make__map2d()
+// {
+// 	data->y = 0;
+// 	player->pix_y = 0;
+// 	while (data->world[data->y])
+// 	{
+// 		data->x = 0;
+// 		player->pix_x = 0;
+// 		while (data->world[data->y][data->x])
+// 		{
+// 			data->x++;
+// 			player->pix_x += data->tile_size;
+// 		}
+// 		data->y++;
+// 		player->pix_y += data->tile_size;
+// 	}
+// }
 
 int    find_p()
 {

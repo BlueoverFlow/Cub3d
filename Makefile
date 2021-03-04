@@ -23,7 +23,6 @@ SRCS = 	file_management.c	\
 		utils.c				\
 		map2d.c				\
 		rays.c				\
-		walls.c				\
 		player.c
 
 SRCS_PATH = ./srcs

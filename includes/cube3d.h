@@ -25,6 +25,7 @@
 # define KEY_RIGHT 124
 # define KEY_DOWN 125
 # define KEY_UP 126
+# define TILE_SIZE 400
 # define PI 6.28310000
 
 typedef struct s_file
@@ -101,15 +102,14 @@ typedef struct  s_wall
 {
     float   top;
     float   bottom;
-    float   height;
-    float   distance;
+    float   hieght;
+    float   pp_dist;
     float   corr_len;
 }               t_wall;
 
 typedef struct s_image
 {
     void    *img;
-    char    *addr;
     int     bits_per_pixel;
     int     line_length;
     int     endian;
@@ -120,6 +120,19 @@ typedef struct  s_dimens
     int         w;
     int         h;
 }               t_dimens;
+
+typedef struct	s_draw
+{
+	char		north;
+	char		west;
+	char		south;
+	char		east;
+	t_dimens	dimens;
+	t_dimens	m_dimens;
+	int			r;
+	int			c;
+};				t_draw;
+
 
 //======================= main.c ==================
 int     main(int argc, char *argv[]);
@@ -205,16 +218,17 @@ t_image         *draw;
 t_image         *draw2;
 int             g_is_pressed;
 t_ray           *g_rays;
-void            *g_img_3d;
-void            *g_img_n;
-void            *g_img_s;
-void            *g_img_w;
-void            *g_img_e;
+int           	*g_img_3d;
+void            *g_dnorth;
+void            *g_dsouth;
+void            *g_dwest;
+void            *g_deast;
 int             *g_data_3d;
-int             *g_data_n;
-int             *g_data_s;
-int             *g_data_w;
-int             *g_data_e;
+int             *g_north;
+int             *g_south;
+int             *g_west;
+int             *g_east;
+t_dimens		g_dimens[10];
 t_dimens        g_dimd[10];
 
 #endif

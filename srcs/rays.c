@@ -120,12 +120,66 @@ void cast_rays()
 
     i = -1;
     angle = player->ang - radian(FOV / 2);
-    while (++i <= data->window_width)
+    while (++i < data->window_width)
     {
         g_rays[i].ang = norm_angle(angle);
-		// printf("%d \n", player->direction);
         longer_len(&g_rays[i]);
         draw_line(g_rays[i].length, player->x, player->y, g_rays[i].ang, get_color(255, 255, 0));
         angle += radian(FOV) / data->window_width;
     }
 }
+
+// void                    cast_walls(void)
+// {
+// 	int	i;
+// 	int	j;
+// 	t_wall     wall;
+
+// 	wall.pp_dist = ((float)data->window_width / 2.0F) / tanf(radian((FOV / 2)));
+// 	i = -1;
+// 	while (++i < data->window_width)
+// 	{
+// 		wall.corr_len = g_rays[i].length * cosf(g_rays[i].ang - player->ang);
+// 		wall.hieght = (float)TILE_SIZE / wall.corr_len * (float)wall.pp_dist;
+// 		wall.top = ((float)data->window_height / 2.0F) - (wall.hieght / 2.0F);
+// 		wall.top = wall.top < 0 ? 0 : wall.top;
+// 		wall.bottom = ((float)data->window_height/ 2.0F) + (wall.hieght / 2.0F);
+// 		wall.bottom = wall.bottom > data->window_height ? data->window_height : wall.bottom;
+// 		j = 0;
+// 		while (j < wall.top)
+// 				g_data_3d[(j++ * data->window_width) + i] = get_color(255, 0, 0);
+// 		j = wall.bottom;
+// 		while (j < data->window_height)
+// 				g_data_3d[(j++ * data->window_width) + i] = get_color(0, 255, 0);
+// 		ft_wall(wall.top, wall.bottom, wall.hieght, i);
+// 	}
+// }
+
+// void                    ft_wall(int w_top, int w_bottom, int w_height, int index)
+// {
+// 	int j;
+// 	int offset_x;
+// 	int offset_y;
+// 	int color;
+
+// 	if (g_rays[index].hit_ver)
+// 			offset_x = (int)g_rays[index].w_hit.y % TILE_SIZE;
+// 	else
+// 			offset_x = (int)g_rays[index].w_hit.x % TILE_SIZE;
+// 	j = w_top;
+// 	while (j < w_bottom)
+// 	{
+// 		offset_y = (j + ((w_height / 2) - (data->window_height / 2))) *
+// 				((float)g_dimd[0].h / (float)w_height);
+// 		if (g_rays[index].hit_hor && g_rays[index].f_up)
+// 				color = g_data_n[(offset_y * g_dimd[0].h) + offset_x];
+// 		else if (g_rays[index].hit_hor && g_rays[index].f_down)
+// 				color = g_data_s[(offset_y * g_dimd[0].h) + offset_x];
+// 		else if (g_rays[index].hit_ver && g_rays[index].f_left)
+// 				color = g_data_w[(offset_y * g_dimd[0].h) + offset_x];
+// 		else if (g_rays[index].hit_ver && g_rays[index].f_right)
+// 				color = g_data_e[(offset_y * g_dimd[0].h) + offset_x];
+// 		g_data_3d[(j * data->window_width) + index] = color;
+// 		++j;
+// 	}
+// }
