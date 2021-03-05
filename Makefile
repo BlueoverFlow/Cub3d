@@ -24,8 +24,8 @@ SRCS = 	file_management.c	\
 		map2d.c				\
 		rays.c				\
 		game.c				\
-		walls.c				\
-		player.c
+		player.c			\
+		walls.c
 
 SRCS_PATH = ./srcs
 

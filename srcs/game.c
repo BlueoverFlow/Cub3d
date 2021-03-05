@@ -74,7 +74,8 @@ int		update()
 	make_map2d();
 	move_player();
 	cast_rays();
+	// cast_walls();
 	print_circle(player.x, player.y, player.scale, get_color(255, 0, 0));
-	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, draw.img, 0, 0);
+	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, g_img, 0, 0);
 	return (0);
 }

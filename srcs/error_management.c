@@ -15,7 +15,7 @@
 int     check_err()
 {
     check_args();
-    if (ERROR(open(file.file, O_RDONLY)))
+    if (open(file.file, O_RDONLY) < 0)
         return (out("Error\ncan't find your \".cub\" file!\n"));
 	read_file();
 	check_elements();
@@ -24,10 +24,9 @@ int     check_err()
 
 int		check_elements()
 {
-	if (ERROR(handle_map()))
-		return (0);
-	if (ERROR(handle_r()))
-		return (0);
+	handle_r();
+	texture_data();
+	handle_map();
 	return (1);
 }
 
@@ -45,7 +44,7 @@ int     check_args()
         return (out("Error\nAt least 1 argument is required!\n"));
     if (file.argc > 3)
         return (out("Error\nneed only 2 argument maximum\n"));
-    if (ERROR(check_filename(".cub")))
+    if (check_filename(".cub") == -1)
         return (out("Error\nneed a \".cub\" file!\n"));
     if (file.argc == 3 && ft_strcmp(file.argv[2], "--save") == 0)
         file.screenshot = 1;

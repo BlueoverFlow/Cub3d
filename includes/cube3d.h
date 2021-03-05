@@ -15,8 +15,8 @@
 # include "../libft/includes/libft.h"
 # include <mlx.h>
 # include <math.h>
-# define ERROR(x) ((x) == -1)
 # define FOV 60
+# define TILE_SIZE 400
 # define KEY_A 0
 # define KEY_S 1
 # define KEY_D 2
@@ -115,11 +115,32 @@ typedef struct s_image
     int     endian;
 }           t_image;
 
+typedef struct s_image2
+{
+    int     bits_per_pixel;
+    int     line_length;
+    int     endian;
+}           t_image2;
+
 typedef struct  s_dimens
 {
     int         w;
     int         h;
 }               t_dimens;
+
+typedef struct  s_texture
+{
+	char		*north;
+	char		*west;
+	char        *south;
+	char        *east;
+	char        **map;
+	t_dimens    dimens;
+	t_dimens    m_dimens;
+	int         rows;
+	int         cols;
+	char        *xpm_sprite;
+}               t_texture;
 
 //======================= main.c ==================
 int     main(int argc, char *argv[]);
@@ -137,6 +158,7 @@ int     check_err();
 int     check_filename(char *ext);
 int     check_args();
 int		check_elements();
+void	init_texture();
 
 //======================= utils.c =================
 void			colored_square(int scale, int x, int y, int color);
@@ -170,6 +192,7 @@ char	**find_id(char	*id);
 int		handle_map();
 char    is_border(int k, int j);
 int		map_parsing(int k, int j);
+int		texture_data();
 
 //======================= map2d.c ================= 
 void    tile_size();
@@ -206,19 +229,20 @@ t_cube          data;
 t_player        player;
 t_file          file;
 t_image         draw;
-t_image         *draw2;
-int             g_is_pressed;
-t_ray           *g_rays;
-void            *g_img_3d;
-void            *g_img_n;
-void            *g_img_s;
-void            *g_img_w;
-void            *g_img_e;
-int             *g_data_3d;
-int             *g_data_n;
-int             *g_data_s;
-int             *g_data_w;
-int             *g_data_e;
+t_image2		draw2[10];
+t_texture		g_texture;
 t_dimens        g_dimd[10];
+t_ray           *g_rays;
+void            *g_main_img;
+void    		*g_img;
+int             *g_main_addr;
+int             *g_north;
+int             *g_south;
+int             *g_west;
+int             *g_east;
+void            *g_dnorth;
+void            *g_dsouth;
+void            *g_dwest;
+void            *g_deast;
 
 #endif

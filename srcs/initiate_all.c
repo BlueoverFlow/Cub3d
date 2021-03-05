@@ -45,9 +45,24 @@ void    init_player()
 
 void	sub_init()
 {
+	make_img();
 	get_world();
 	tile_size();
-	make_img();
 	init_player();
 	find_p();
+	// init_texture();
+}
+
+void	init_texture()
+{
+	g_dnorth = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.north, &g_dimd[0].w, &g_dimd[0].h);
+	g_north = (int *)mlx_get_data_addr(g_dnorth, &draw2[2].bits_per_pixel, &draw2[2].line_length, &draw2[2].endian);
+	g_dsouth = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.south, &g_dimd[1].w, &g_dimd[1].h);
+	g_south = (int *)mlx_get_data_addr(g_dsouth, &draw2[3].bits_per_pixel, &draw2[3].line_length, &draw2[2].endian);
+	g_deast = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.east, &g_dimd[2].w, &g_dimd[2].h);
+	g_east = (int *)mlx_get_data_addr(g_deast, &draw2[4].bits_per_pixel, &draw2[4].line_length, &draw2[2].endian);
+	g_dwest = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.west, &g_dimd[3].w, &g_dimd[3].h);
+	g_west = (int *)mlx_get_data_addr(g_dwest, &draw2[5].bits_per_pixel, &draw2[5].line_length, &draw2[2].endian);
+	cast_rays();
+	cast_walls();
 }

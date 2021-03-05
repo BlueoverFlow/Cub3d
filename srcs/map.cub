@@ -1,12 +1,12 @@
 R 1000 1000
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
+NO ./xpm/t10.xpm
+SO ./xpm/t12.xpm    
 
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+WE ./xpm/t13.xpm
+EA ./xpm/t11.xpm
 S ./path_to_the_sprite_texture
-F 220,100,0
-C 225,30,0
+F 225,255,255
+C 225,0,255
 
 111111111              111111111
 100000001              100000001

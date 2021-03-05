@@ -30,14 +30,13 @@ void    cast_walls()
         wall.bottom = ((float)data.mapd_h / 2.0F) + (wall.height / 2.0F);
         wall.bottom = wall.bottom > data.mapd_h ? data.mapd_h : wall.bottom;
         while (j < wall.top)
-                g_data_3d[(j++ * data.mapd_w) + i] = get_color(255, 255, 255);
+                g_main_addr[(j++ * data.mapd_w) + i] = get_color(255, 255, 255);
         j = wall.bottom;
         while (j < data.mapd_h)
-                g_data_3d[(j++ * data.mapd_w) + i] = get_color(0, 255, 255);
+                g_main_addr[(j++ * data.mapd_w) + i] = get_color(0, 255, 255);
         ft_wall(wall.top, wall.bottom, wall.height, i);
         ++i;
     }
-    mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, draw.img, 0, 0);
 }
 
 void    ft_wall(int w_top, int w_bottom, int w_height, int index)
@@ -60,14 +59,14 @@ void    ft_wall(int w_top, int w_bottom, int w_height, int index)
             offset_y = (j + ((w_height / 2) - (data.mapd_h / 2))) *
                     ((float)g_dimd[0].h / (float)w_height);
             if (g_rays[index].hit_hor && g_rays[index].f_up)
-                    color = g_data_n[(offset_y * g_dimd[0].h) + offset_x];
+                    color = g_north[(offset_y * g_dimd[0].h) + offset_x];
             else if (g_rays[index].hit_hor && g_rays[index].f_down)
-                    color = g_data_s[(offset_y * g_dimd[0].h) + offset_x];
+                    color = g_south[(offset_y * g_dimd[0].h) + offset_x];
             else if (g_rays[index].hit_ver && g_rays[index].f_left)
-                    color = g_data_w[(offset_y * g_dimd[0].h) + offset_x];
+                    color = g_west[(offset_y * g_dimd[0].h) + offset_x];
             else if (g_rays[index].hit_ver && g_rays[index].f_right)
-                    color = g_data_e[(offset_y * g_dimd[0].h) + offset_x];
-            g_data_3d[(j * data.mapd_w) + index] = color;
+                    color = g_east[(offset_y * g_dimd[0].h) + offset_x];
+            g_main_addr[(j * data.mapd_w) + index] = color;
             ++j;
     }
 }
