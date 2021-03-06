@@ -1,24 +1,24 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ehakam <ehakam@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/03/04 22:24:52 by ehakam            #+#    #+#              #
-#    Updated: 2020/03/04 22:39:49 by ehakam           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Makefile.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/03/03 08:42:21 by ael-mezz          #+#    #+#             */
+/*   Updated: 2021/01/22 17:23:59 by ael-mezz         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 # -*- Makefile -*-
 
-SRC =	cub/ft_cub_main.c \
-		cub/ft_cub_utils.c \
-		cub/ft_cub_ray.c \
-		cub/ft_cub_player.c \
-		cub/ft_cub_events.c \
-		cub/ft_cub_wall.c \
-		cub/ft_cub_read.c \
+SRC =	cub/main.c \
+		cub/utils1.c \
+		cub/rays.c \
+		cub/player.c \
+		cub/game.c \
+		cub/walls.c				\
+		cub/read_all.c			\
 		utils/ft_putnbr_fd.c \
 		utils/ft_strnstr.c \
 		utils/ft_split.c \
