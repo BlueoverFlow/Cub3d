@@ -20,8 +20,6 @@ void    tile_size()
 	i = data.window_width / data.map_width;
 	j = data.window_height / data.map_height;
 	data.tile_size = i > j ? j * 0.2 : i * 0.2;
-	data.mapd_w = data.tile_size * data.map_width;
-	data.mapd_h = data.tile_size * data.map_height;
 }
 
 void    make_map2d()

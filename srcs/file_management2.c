@@ -52,4 +52,6 @@ void	get_world()
 			j++;
 		}
 	}
+	data.mapd_w = TILE_SIZE * data.map_width;
+	data.mapd_h = TILE_SIZE * data.map_height;
 }

@@ -124,7 +124,6 @@ void cast_rays()
 	{
 		g_rays[i].ang = norm_angle(angle);
 		longer_len(&g_rays[i]);
-		// draw_line(g_rays[i].length, player.x, player.y, g_rays[i].ang, get_color(255, 255, 0));
 		angle += radian(FOV) / data.window_width;
 	}
 }
