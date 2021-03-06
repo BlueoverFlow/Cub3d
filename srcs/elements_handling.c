@@ -103,19 +103,19 @@ int		texture_data()
 	id[0] = find_id("NO");
 	if (ft_strlen_2d(id[0]) > 2 || ft_strlen_2d(id[0]) < 2)
 		return (out("Can't find the north texture!\n"));
-	g_texture.north = id[0][1];
+	g_texture.north = ft_strdup(id[0][1]);
 	id[1] = find_id("SO");
 	if (ft_strlen_2d(id[1]) > 2 || ft_strlen_2d(id[1]) < 2)
 		return (out("Can't find the south texture!\n"));
-	g_texture.south = id[1][1];
+	g_texture.south = ft_strdup(id[1][1]);
 	id[2] = find_id("WE");
 	if (ft_strlen_2d(id[2]) > 2 || ft_strlen_2d(id[2]) < 2)
 		return (out("Can't find the west texture!\n"));
-	g_texture.west = id[2][1];
+	g_texture.west = ft_strdup(id[2][1]);
 	id[3] = find_id("EA");
 	if (ft_strlen_2d(id[3]) > 2 || ft_strlen_2d(id[3]) < 2)
 		return (out("Can't find the east texture!\n"));
-	g_texture.east = id[3][1];
+	g_texture.east = ft_strdup(id[3][1]);
 	while (++i < 4)
 		free_2d(id[i]);
 	free(id);

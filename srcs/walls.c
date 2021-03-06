@@ -24,7 +24,7 @@ void    cast_walls()
     {
         j = 0;
         wall.corr_len = g_rays[i].length * cosf(g_rays[i].ang - player.ang);
-        wall.height = (float)data.tile_size / wall.corr_len * (float)wall.distance;
+        wall.height = (float)TILE_SIZE / wall.corr_len * (float)wall.distance;
         wall.top = ((float)data.mapd_h / 2.0F) - (wall.height / 2.0F);
         wall.top = wall.top < 0 ? 0 : wall.top;
         wall.bottom = ((float)data.mapd_h / 2.0F) + (wall.height / 2.0F);
@@ -47,9 +47,9 @@ void    ft_wall(int w_top, int w_bottom, int w_height, int index)
         int     color;
 
         if (g_rays[index].hit_ver)
-                offset_x = (int)g_rays[index].w_hit.y % data.tile_size;
+                offset_x = (int)g_rays[index].w_hit.y % TILE_SIZE;
         else
-                offset_x = (int)g_rays[index].w_hit.x % data.tile_size;
+                offset_x = (int)g_rays[index].w_hit.x % TILE_SIZE;
         j = w_top;
         offset_y = (j + ((w_height / 2) - (data.mapd_h / 2))) *
                 ((float)g_dimd[0].h / (float)w_height);

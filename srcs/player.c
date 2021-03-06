@@ -46,7 +46,7 @@ int    charactere()
 			player.rot_ang = radian(0);
 	else
 		return (0);
-	player.x = (data.x * data.tile_size + (data.tile_size / 2));
-	player.y = (data.y * data.tile_size + (data.tile_size / 2));
+	player.x = (data.x * TILE_SIZE + (TILE_SIZE / 2));
+	player.y = (data.y * TILE_SIZE + (TILE_SIZE / 2));
 	return (1);
 }

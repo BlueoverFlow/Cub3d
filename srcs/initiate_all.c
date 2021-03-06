@@ -40,17 +40,17 @@ void    init_player()
 	player.rot_speed = radian(10);
 	player.side_ang = 0;
 	player.direction = 0;
-	player.scale = data.tile_size / 4;
+	// player.scale = TILE_SIZE / 4;
 }
 
 void	sub_init()
 {
 	make_img();
 	get_world();
-	tile_size();
+	// tile_size();
 	init_player();
 	find_p();
-	// init_texture();
+	init_texture();
 }
 
 void	init_texture()

@@ -34,12 +34,12 @@ static t_grides     hor_intercept(t_ray *rays)
 	t_grides hor;   
 
 	hor.len = 1000000000;
-	hor.intercept.y = floorf(player.y / (float)data.tile_size) * (float)data.tile_size;
-	hor.intercept.y += (rays->f_down ? (float)data.tile_size : 0.0F);
+	hor.intercept.y = floorf(player.y / (float)TILE_SIZE) * (float)TILE_SIZE;
+	hor.intercept.y += (rays->f_down ? (float)TILE_SIZE : 0.0F);
 	hor.intercept.x = player.x + (hor.intercept.y - player.y) / tanf(rays->ang);
-	hor.step.y = (float)data.tile_size;
+	hor.step.y = (float)TILE_SIZE;
 	hor.step.y *= (rays->f_up ? -1.0F : 1.0F);
-	hor.step.x = (float)data.tile_size / tanf(rays->ang);
+	hor.step.x = (float)TILE_SIZE / tanf(rays->ang);
 	hor.step.x *= (rays->f_left && hor.step.x > 0.0F) ? -1.0F : 1.0F;
 	hor.step.x *= (rays->f_right && hor.step.x < 0.0F) ? -1.0F : 1.0F;
 	hor.hit.x = hor.intercept.x;
@@ -63,12 +63,12 @@ static t_grides     ver_intercept(t_ray *rays)
 	t_grides ver;
 
 	ver.len = 1000000000;
-	ver.intercept.x = floorf(player.x / (float)data.tile_size) * (float)data.tile_size;
-	ver.intercept.x += (rays->f_right ? (float)data.tile_size : 0.0F);
+	ver.intercept.x = floorf(player.x / (float)TILE_SIZE) * (float)TILE_SIZE;
+	ver.intercept.x += (rays->f_right ? (float)TILE_SIZE : 0.0F);
 	ver.intercept.y = player.y + (ver.intercept.x - player.x) * tanf(rays->ang);
-	ver.step.x = (float)data.tile_size;
+	ver.step.x = (float)TILE_SIZE;
 	ver.step.x *= (rays->f_left ? -1.0F : 1.0F);
-	ver.step.y = (float)data.tile_size * tanf(rays->ang);
+	ver.step.y = (float)TILE_SIZE * tanf(rays->ang);
 	ver.step.y *= (rays->f_up && ver.step.y > 0.0F) ? -1.0F : 1.0F;
 	ver.step.y *= (rays->f_down && ver.step.y < 0.0F) ? -1.0F : 1.0F;
 	ver.hit.x = ver.intercept.x;
@@ -124,7 +124,7 @@ void cast_rays()
 	{
 		g_rays[i].ang = norm_angle(angle);
 		longer_len(&g_rays[i]);
-		draw_line(g_rays[i].length, player.x, player.y, g_rays[i].ang, get_color(255, 255, 0));
+		// draw_line(g_rays[i].length, player.x, player.y, g_rays[i].ang, get_color(255, 255, 0));
 		angle += radian(FOV) / data.window_width;
 	}
 }
