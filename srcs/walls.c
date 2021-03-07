@@ -12,48 +12,35 @@
 
 #include "../includes/cube3d.h"
 
-int     ft_is_wall(float x, float y)
-{
-    float     grid_x;
-    float     grid_y;
-
-    if (!(x <= g_data.m_dimens.w &&
-        x >= 0 && y <= g_data.m_dimens.h && y >= 0))
-        return (1);
-    grid_x = floor(x / (float)TILE_SIZE);
-    grid_y = floor(y / (float)TILE_SIZE);
-    return (g_data.map[(int)grid_y][(int)grid_x] == '1' ? 1 : 0);
-}
-
-void			ft_draw_walls(void)
+void			cast_walls(void)
 {
 	int			i;
 	int			j;
 	t_wall_data	wall;
 
-	wall.pp_dist = ((float)g_data.dimens.w / 2.0F) / tanf(radian((FOV / 2)));
+	wall.pp_dist = ((float)g_cube.window.w / 2.0F) / tanf(radian((FOV / 2)));
 	i = 0;
-	while (i < g_data.dimens.w)
+	while (i < g_cube.window.w)
 	{
-		wall.corr_len = g_rays[i].length * cosf(g_rays[i].angle - g_p.rot_ang);
+		wall.corr_len = g_rays[i].length * cosf(g_rays[i].angle - g_player.rot_ang);
 		wall.hieght = (float)TILE_SIZE / wall.corr_len * (float)wall.pp_dist;
-		wall.top = ((float)g_data.dimens.h / 2.0F) - (wall.hieght / 2.0F);
+		wall.top = ((float)g_cube.window.h / 2.0F) - (wall.hieght / 2.0F);
 		wall.top = wall.top < 0 ? 0 : wall.top;
-		wall.bottom = ((float)g_data.dimens.h / 2.0F) + (wall.hieght / 2.0F);
-		wall.bottom = wall.bottom > g_data.dimens.h ? g_data.dimens.h : wall.bottom;
+		wall.bottom = ((float)g_cube.window.h / 2.0F) + (wall.hieght / 2.0F);
+		wall.bottom = wall.bottom > g_cube.window.h ? g_cube.window.h : wall.bottom;
 		j = 0;
 		while (j < wall.top)
-			g_data_3d[(j++ * g_data.dimens.w) + i] = get_color(0,255,255);
+			g_img.addr[(j++ * g_cube.window.w) + i] = get_color(0,255,255);
 		j = wall.bottom;
-		while (j < g_data.dimens.h)
-			g_data_3d[(j++ * g_data.dimens.w) + i] = get_color(255,0,0);
-		ft_wall(wall.top, wall.bottom, wall.hieght, i);
+		while (j < g_cube.window.h)
+			g_img.addr[(j++ * g_cube.window.w) + i] = get_color(255,0,0);
+		draw_wall(wall.top, wall.bottom, wall.hieght, i);
 		++i;
 	}
-	mlx_put_image_to_window(g_mlx, g_win, g_img_3d, 0, 0);
+	mlx_put_image_to_window(g_cube.mlx_ptr, g_cube.win_ptr, g_img.img, 0, 0);
 }
 
-void			ft_wall(int w_top, int w_bottom, int w_height, int index)
+void			draw_wall(int w_top, int w_bottom, int w_height, int index)
 {
 	int j;
 	int offset_x;
@@ -67,17 +54,17 @@ void			ft_wall(int w_top, int w_bottom, int w_height, int index)
 	j = w_top;
 	while (j < w_bottom)
 	{
-		offset_y = (j + ((w_height / 2) - (g_data.dimens.h / 2))) *
+		offset_y = (j + ((w_height / 2) - (g_cube.window.h / 2))) *
 			((float)g_dimd[0].h / (float)w_height);
 		if (g_rays[index].hit_hor && g_rays[index].r_up)
-			color = g_data_n[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_north[(offset_y * g_dimd[0].h) + offset_x];
 		else if (g_rays[index].hit_hor && g_rays[index].r_down)
-			color = g_data_s[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_south[(offset_y * g_dimd[0].h) + offset_x];
 		else if (g_rays[index].hit_ver && g_rays[index].r_left)
-			color = g_data_w[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_west[(offset_y * g_dimd[0].h) + offset_x];
 		else if (g_rays[index].hit_ver && g_rays[index].r_right)
-			color = g_data_e[(offset_y * g_dimd[0].h) + offset_x];
-		g_data_3d[(j * g_data.dimens.w) + index] = color;
+			color = g_east[(offset_y * g_dimd[0].h) + offset_x];
+		g_img.addr[(j * g_cube.window.w) + index] = color;
 		++j;
 	}
 }

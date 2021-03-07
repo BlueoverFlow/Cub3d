@@ -20,69 +20,46 @@
 # define TILE_SIZE 400
 # define FOV 60
 # define INIT_MOVE_SPD ((float)TILE_SIZE / (float)10)
-# define INIT_ROT_SPD (g_data.ray_step * 30)
+# define INIT_ROT_SPD (g_cube.ratio * 30)
 # define GAME_TITLE "Cub3D"
 
-
-typedef struct	s_axis
-{
-	float		x;
-	float		y;
-}				t_axis;
-
-typedef struct	s_dimens
+typedef struct	s_dim
 {
 	int			w;
 	int			h;
-}               t_dimens;
+	float		x;
+	float		y;
+}               t_dim;
 
-typedef struct	s_ray
+typedef struct  s_ray
 {
-	float		length;
-	float		angle;
-	int			r_left;
-	int			r_right;
-	int			r_up;
-	int			r_down;
-	t_axis		w_hit;
-	int			hit_ver;
-	int			hit_hor;
-}				t_ray;
+    float   length;
+    float   ang;
+    int     f_left;
+    int     f_right;
+    int     f_down;
+    int     f_up;
+    t_dim   w_hit;
+    int     hit_ver;
+    int     hit_hor;
+}               t_ray;
 
-typedef struct	s_player
+typedef struct s_grides
 {
-    t_axis		axis;
-    int			turn_direct;
-    int			move_direct;
-    float		rot_ang;
-    float		side_ang;
-    float		move_speed;
-    float		rot_speed;
-}				t_player;
+    t_dim      hit;
+    t_dim      intercept;
+    t_dim      step;
+    float       len;
+}               t_grides;
 
-typedef struct	s_color
+typedef struct  s_wall
 {
-	int			r;
-	int			g;
-	int			b;
-}				t_color;
-
-typedef struct	s_ray_data
-{
-	t_axis		hit;
-	t_axis		inter;
-	t_axis		step;
-	float		len;
-}				t_ray_data;
-
-typedef struct	s_wall_data
-{
-	float		top;
-	float		bottom;
-	float		hieght;
-	float		pp_dist;
-	float		corr_len;
-}				t_wall_data;
+    float   top;
+    float   bottom;
+    float   height;
+    float   distance;
+    float   corr_len;
+}               t_wall;
 
 typedef struct s_file
 {
@@ -94,73 +71,83 @@ typedef struct s_file
     int     map_pos;
 }           t_file;
 
-typedef struct  s_data
+typedef struct s_cube
 {
-	char        **map;
-	char		**world;
-	t_dimens    dimens;
-	t_dimens    m_dimens;
-	int         rows;
-	int         cols;
-	t_color     floor;
-	t_color     ciel;
-	float       ray_step;
-	char        *xpm_n;
-	char        *xpm_w;
-	char        *xpm_s;
-	char        *xpm_e;
-	char		*xpm_sprite;
-}               t_data;
+	t_dim	window;
+	t_dim	map_size;
+	t_dim	map;
+	float	ratio;
+    char    **map;
+    char    **world;
+    void    *win_ptr;
+    void    *mlx_ptr;
+}           t_cube;
 
-typedef struct s_image_data
+typedef struct	s_player
+{
+	t_dim		pos;
+    float		ang;
+    int			move_directionion;
+    float		rot_ang;
+    float		side_ang;
+    float     	direction;
+    float		move_speed;
+    float		rot_speed;
+	int			is_pressed;
+}				t_player;
+
+typedef struct	s_texture
+{
+	char		*north;
+	char		*west;
+	char		*east;
+	char		*south;
+}				t_texture;
+
+typedef struct s_image
 {
 	int     bits_per_pixel;
-	int     size_line;
+	int     line_lenght;
 	int     endian;
-}               t_image_data;
+	void	*img;
+	int		*addr;
+}               t_image;
 
-t_image_data    g_imgd[10];
-t_dimens        g_dimd[10];
+t_image			g_img;
 t_player		g_p;
-t_data          g_data;
+t_texture		g_texture;
+t_cube			g_cube;
 t_ray			*g_rays;
 t_file			file;
+t_dim			g_dimd[10];
+t_image			g_imgd[10];
 char			*g_fname;
-void			*g_mlx;
-void			*g_win;
-void			*g_img_3d;
-void			*g_img_n;
-void			*g_img_s;
-void			*g_img_w;
-void			*g_img_e;
-int				*g_data_3d;
-int				*g_data_n;
-int				*g_data_s;
-int				*g_data_w;
-int				*g_data_e;
-int				g_is_pressed;
+void			*g_cube.mlx_ptr;
+void			*g_cube.win_ptr;
+void			*g_draw_n;
+void			*g_draw_s;
+void			*g_draw_w;
+void			*g_draw_e;
+int				*g_north;
+int				*g_south;
+int				*g_west;
+int				*g_east;
 
-void			ft_init_all();
-void			ft_update_all();
-void			ft_wall(int wall_top, int wall_bottom, int wall_height, int index);
-void			ft_rays(float x, float y, float angle);
-void			ft_draw_walls();
-int				ft_update();
+void			sub_init();
+int				render();
+void			draw_wall(int wall_top, int wall_bottom, int wall_height, int index);
+void			cast_rays(float x, float y, float angle);
+void			cast_walls();
 int				ft_key_pressed(int key);
 int				ft_key_released(int key);
-unsigned int	ft_color_s(t_color color);
-int				ft_is_wall(float x, float y);
+int				is_wall(float x, float y);
 float			radian(float angle);
 float       	distanceAB(float Ax, float Ay);
 float      		norm_angle(float angle);
-void            ft_process_line(char *line);
-void            ft_read_all(int fd);
-char            *ft_strnstr(const char *haystack, const char *needle, size_t len);
-char            *ft_strdup(const char *s);
-char            **ft_split(const char *ss, char c);
-int             ft_atoi(const char *str);
 int				supreme_init(int argc, char **argv);
 void 			var_init();
+void            texture_init();
+void            player_init();
 int				check_err();
 int				check_elements();
 int				check_filename(char *ext);
@@ -170,23 +157,16 @@ int				handle_r();
 int				handle_map();
 int				map_parsing(int k, int j);
 int				texture_data();
-int				ft_strcmp(char *s1, char *s2);
-int				ft_strlen_2d(char **str);
 int				out(char *error_msg);
-int				free_2d(char **str);
 void			read_file();
 void			read_elements();
 void			the9th_elem(char *line, int fd);
 void			read_map();
-void			get_mapwidth();
+void			get_mapsize();
 void			get_world();
-void			*ft_calloc(size_t count, size_t size);
-int				ft_strnchar(const char *str, char c);
 unsigned int	get_color(int r, int g, int b);
 int				exit_game();
 int				find_p();
 int				charactere(int y, int x);
-
-
 
 #endif
