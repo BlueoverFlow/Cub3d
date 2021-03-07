@@ -75,5 +75,9 @@ t_list				*ft_lstmap(t_list *lst,
 								void *(*f)(void *), void(*del)(void *));
 char				*ft_ptoa(void *p, char c);
 void				*ft_memalloc(size_t size);
+int					ft_strnchar(const char *str, char c);
+int					ft_strlen_2d(char **str);
+int					free_2d(char **str);
+int					ft_strcmp(char *s1, char *s2);
 
 #endif

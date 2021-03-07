@@ -59,10 +59,10 @@ void	the9th_elem(char *line, int fd)
 		{
 			if (**check == '1' || **check == '0' || ** check == '2')
 			{
-				data.map_height++;
+				g_data.rows++;
 				while (get_next_line(fd, &line) > 0)
 				{
-					data.map_height++;
+					g_data.rows++;
 					free(line);
 				}
 				break;
@@ -81,10 +81,10 @@ void	read_map()
 	int     j;
 
 	j = 0;
-	if (data.map_height > 0)
+	if (g_data.rows > 0)
 	{
-		data.map = malloc((sizeof(char *) * data.map_height) + 1);
-		data.map[data.map_height] = NULL;
+		g_data.world = malloc((sizeof(char *) * g_data.rows) + 1);
+		g_data.world[g_data.rows] = NULL;
 	}
 	fd = open(file.file, O_RDONLY);
 	while (--file.map_pos)
@@ -94,11 +94,11 @@ void	read_map()
 	}
 	while (get_next_line(fd, &line) > 0)
 	{
-		data.map[j] = ft_strdup(line);
+		g_data.world[j] = ft_strdup(line);
 		free(line);
 		j++;
 	}
-	data.map[j] = ft_strdup(line);
+	g_data.world[j] = ft_strdup(line);
 	free(line);
 	close (fd);
 }

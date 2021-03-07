@@ -14,18 +14,18 @@ NAME = libft/libft.a
 
 FLAGS =
 
-SRCS = 	file_management.c	\
-		file_management2.c	\
+SRCS = 	__main__.c			\
 		elements_handling.c	\
-		main.c				\
 		error_management.c	\
-		initiate_all.c		\
-		utils.c				\
-		map2d.c				\
-		rays.c				\
+		file_management.c	\
+		file_management2.c	\
 		game.c				\
+		initiate_all.c		\
 		player.c			\
+		rays.c				\
+		utils1.c			\
 		walls.c
+
 
 SRCS_PATH = ./srcs
 
@@ -48,12 +48,14 @@ all: $(NAME)
 $(NAME): $(SRCS) $(HEADER)
 	@cd libft && make all && make bonus
 	@cd ..
-	@$(CC) $(SRCS) $(NAME) $(FLAGS) -I minilibx -lmlx -framework OpenGL -framework AppKit -o cube3d
+	@$(CC) $(SRCS) $(NAME) $(FLAGS) -I minilibx -lmlx -framework OpenGL -framework AppKit -o cub3d
 
 clean:
 	@echo "cleaning..."
 	@cd srcs && $(RM) *.o
 	@cd libft && make clean
+	@$(RM) cub3d
+	@clear
 
 fclean: clean
 	@$(RM) $(NAME)
@@ -61,7 +63,7 @@ fclean: clean
 
 exec:
 	@echo "executing...\n\n====================="
-	@./cube3d srcs/map.cub
+	@./cub3d map.cub
 	@echo =====================
 
 re: fclean all exec

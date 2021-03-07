@@ -10,28 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub_header.h"
+#include "../includes/cube3d.h"
 
-float			ft_radian(float angle)
+
+unsigned int    get_color(int r, int g, int b)
 {
-	return ((float)(angle * M_PI / 180));
+    return ((r * 256 * 256) + (g * 256) + b);
 }
 
-float			ft_distance(float x, float y)
+float           radian(float angle)
 {
-	return (sqrt(powf(x - g_p.axis.x, 2) + powf(y - g_p.axis.y, 2)));
+    return ((float) (angle * M_PI / 180));
 }
 
-float			ft_norm_angle(float angle)
+float      norm_angle(float angle)
 {
-	if (angle >= ft_radian(360.0F))
-		angle -= ft_radian(360.0F);
-	else if (angle <= ft_radian(0.0F))
-		angle += ft_radian(360.0F);
-	return (angle);
+    while (angle <= 0.0F)
+        angle += (2 * M_PI);
+    while (angle >= (2 * M_PI))
+        angle -= (2 * M_PI);
+    return angle;
 }
 
-unsigned int	ft_color_s(t_color color)
+int     out(char *error_msg)
 {
-	return ((color.r * 256 * 256) + (color.g * 256) + color.b);
+    write(2, error_msg, ft_strlen(error_msg));
+	exit (0);
+    return (-1);
+}
+
+float       distanceAB(float Ax, float Ay)
+{
+    return (sqrt(powf(Ax - g_p.axis.x, 2) + powf(Ay - g_p.axis.y, 2)));
 }

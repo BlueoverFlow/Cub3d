@@ -5,74 +5,65 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/02 14:39:48 by ael-mezz          #+#    #+#             */
-/*   Updated: 2020/03/06 22:10:14 by ael-mezz         ###   ########.fr       */
+/*   Created: 2020/03/03 09:12:25 by ael-mezz          #+#    #+#             */
+/*   Updated: 2021/01/22 18:05:14 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-void	move_player()
+int				ft_key_pressed(int key)
 {
-	float x;
-	float y;
-
-	player.ang = norm_angle(player.rot_ang + player.direction);
-	norm_angle(player.side_ang);
-	x = player.x + player.move_speed * player.move_direction * cosf(player.ang + player.side_ang);
-	y = player.y + player.move_speed * player.move_direction * sinf(player.ang + player.side_ang);
-	if (!theres_wall(x , player.y))
-			player.x = x;
-	if (!theres_wall(player.x, y))
-			player.y = y;
-}
-
-int		key_pressed(int key)
-{
-	if (key == KEY_W)
-			player.move_direction = 1;
-	else if (key == KEY_S)
-			player.move_direction = -1;
-	else if (key == KEY_D)
+	if (key == 126 || key == 13)
+		g_p.move_direct = 1;
+	if (key == 125 || key == 1)
+		g_p.move_direct = -1;
+	if (key == 124)
+		g_p.turn_direct = 1;
+	if (key == 123)
+		g_p.turn_direct = -1;
+	if (key == 0)
 	{
-			player.move_direction = 1;
-			player.side_ang = radian(90);
+		g_p.move_direct = 1;
+		g_p.side_ang = radian(-90);
 	}
-	else if (key == KEY_A)
+	if (key == 2)
 	{
-			player.move_direction = 1;
-			player.side_ang = radian(-90);
-	} 
-	else if (key == KEY_RIGHT)
-			player.direction += player.rot_speed;
-	else if (key == KEY_LEFT)
-			player.direction -= player.rot_speed;
+		g_p.move_direct = 1;
+		g_p.side_ang = radian(90);
+	}
+	if (key == 46 && !g_is_pressed)
+		g_is_pressed = 1;
 	return (0);
 }
 
-int		key_released(int key)
+int				ft_key_released(int key)
 {
-	if (key == KEY_UP || key == KEY_W)
-			player.move_direction = 0;
-	else if (key == KEY_S)
-			player.move_direction = 0;
-	else if (key == KEY_D)
+	if (key == 126 || key == 13)
+		g_p.move_direct = 0;
+	if (key == 125 || key == 1)
+		g_p.move_direct = 0;
+	if (key == 124)
+		g_p.turn_direct = 0;
+	if (key == 123)
+		g_p.turn_direct = 0;
+	if (key == 0)
 	{
-			player.move_direction = 0;
-			player.side_ang = 0;
+		g_p.move_direct = 0;
+		g_p.side_ang = radian(0);
 	}
-	else if (key == KEY_A)
+	if (key == 2)
 	{
-			player.move_direction = 0;
-			player.side_ang = 0;
+		g_p.move_direct = 0;
+		g_p.side_ang = radian(0);
 	}
+	if (key == 46)
+		g_is_pressed = 0;
 	return (0);
 }
 
-int		update()
+int				ft_update(void)
 {
-	move_player();
-	cast_rays();
-	cast_walls();
+	ft_update_all();
 	return (0);
 }

@@ -14,22 +14,22 @@
 
 void	get_mapwidth()
 {
-	int w[data.map_height];
+	int w[g_data.rows];
 	int len;
 	int j;
 	int k;
 
-	k = data.map_height + 1;
+	k = g_data.rows + 1;
 	j = 0;
-	len = (int )ft_strlen(data.map[j]);
+	len = (int )ft_strlen(g_data.world[j]);
 	while (--k)
 	{
-		w[j] = (int )ft_strlen(data.map[j]);
+		w[j] = (int )ft_strlen(g_data.world[j]);
 		if (len <= w[j])
 			len = w[j];
 		j++;
 	}
-	data.map_width = len;
+	g_data.cols = len;
 }
 
 void	get_world()
@@ -37,21 +37,19 @@ void	get_world()
 	int j;
 	int k;
 
-	k = data.map_height;
-	data.world = malloc(sizeof(char *) * data.map_height + 1);
-	data.world[data.map_height] = NULL;
+	k = g_data.rows;
+	g_data.map = malloc(sizeof(char *) * g_data.rows + 1);
+	g_data.map[g_data.rows] = NULL;
 	while(k--)
 	{
 		j = -1;
-		data.world[k] = ft_calloc(data.map_width + 1, sizeof(char));
-		while (data.map[k][++j])
-			data.world[k][j] = data.map[k][j] == ' ' ? '0' : data.map[k][j];
-		while (j < data.map_width)
+		g_data.map[k] = ft_calloc(g_data.cols + 1, sizeof(char));
+		while (g_data.world[k][++j])
+			g_data.map[k][j] = g_data.world[k][j] == ' ' ? '0' : g_data.world[k][j];
+		while (j < g_data.cols)
 		{
-			data.world[k][j] = '0';
+			g_data.map[k][j] = '0';
 			j++;
 		}
 	}
-	data.mapd_w = TILE_SIZE * data.map_width;
-	data.mapd_h = TILE_SIZE * data.map_height;
 }

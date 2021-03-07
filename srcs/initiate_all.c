@@ -6,7 +6,7 @@
 /*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/02 15:33:01 by ael-mezz          #+#    #+#             */
-/*   Updated: 2020/03/06 23:19:19 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/02/18 23:19:19 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@ int		supreme_init(int argc, char **argv)
 	file.argc = argc;
 	var_init();
 	check_err();
-	g_rays = malloc(sizeof(t_ray) * data.window_width + 1);
-	data.mlx_ptr = mlx_init();
-    data.win_ptr = mlx_new_window(data.mlx_ptr, data.window_width, data.window_height, "Cub3d");
+	get_world();
+	find_p();
+	g_data.m_dimens.w = g_data.cols * TILE_SIZE;
+	g_data.m_dimens.h = g_data.rows * TILE_SIZE;
+	g_data.ray_step = (float)FOV / (float)g_data.dimens.w;
+	g_rays = malloc(sizeof(t_ray) * g_data.dimens.w);
 	return (1);
 }
 
@@ -30,37 +33,46 @@ void 	var_init()
 	file.elem = malloc((sizeof(char *) * 8) + 1);
 	file.elem[8] = NULL;
 	file.map_pos = 1;
-	data.map_height = 1;
+	g_data.rows = 1;
 }
 
-void    init_player()
+int    find_p()
 {
-	player.move_direction = 0;
-	player.move_speed = 2;
-	player.rot_speed = radian(10);
-	player.side_ang = 0;
-	player.direction = 0;
+	int	p;
+	int x;
+	int	y;
+
+	p = 0;
+	y = 0;
+	while (g_data.map[y])
+	{
+		x = 0;
+		while (g_data.map[y][x])
+		{
+			if (charactere(y, x))
+				p++;
+			x++;
+		}
+		y++;
+    }
+	if (p == 0)
+		return (out("Error\nNo player found!\n"));
+	return (p == 1 ? 1 : out("Error\ntoo many players!\n"));
 }
 
-void	sub_init()
+int    charactere(int y, int x)
 {
-	make_img();
-	get_world();
-	init_player();
-	find_p();
-	// init_texture();
-}
-
-void	init_texture()
-{
-	g_dnorth = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.north, &g_dimd[0].w, &g_dimd[0].h);
-	g_north = (int *)mlx_get_data_addr(g_dnorth, &draw2[2].bits_per_pixel, &draw2[2].line_length, &draw2[2].endian);
-	g_dsouth = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.south, &g_dimd[1].w, &g_dimd[1].h);
-	g_south = (int *)mlx_get_data_addr(g_dsouth, &draw2[3].bits_per_pixel, &draw2[3].line_length, &draw2[3].endian);
-	g_deast = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.east, &g_dimd[2].w, &g_dimd[2].h);
-	g_east = (int *)mlx_get_data_addr(g_deast, &draw2[4].bits_per_pixel, &draw2[4].line_length, &draw2[4].endian);
-	g_dwest = mlx_xpm_file_to_image(data.mlx_ptr, g_texture.west, &g_dimd[3].w, &g_dimd[3].h);
-	g_west = (int *)mlx_get_data_addr(g_dwest, &draw2[5].bits_per_pixel, &draw2[5].line_length, &draw2[5].endian);
-	cast_rays();
-	cast_walls();
+	if (g_data.map[y][x] == 'N')
+		g_p.rot_ang = radian(270);
+	else if (g_data.map[y][x] == 'W')
+		g_p.rot_ang = radian(180);
+	else if (g_data.map[y][x] == 'S')
+		g_p.rot_ang = radian(90);
+	else if (g_data.map[y][x] == 'E')
+		g_p.rot_ang = radian(0);
+	else
+		return (0);
+	g_p.axis.x = (x * TILE_SIZE + (TILE_SIZE / 2));
+	g_p.axis.y = (y * TILE_SIZE + (TILE_SIZE / 2));
+	return (1);
 }

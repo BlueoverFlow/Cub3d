@@ -1,5 +1,2 @@
-.DS_Store
 .vscode
-a.out.dSYM
-cube3d.dSYM
-main.c
+cub3d.dSYM

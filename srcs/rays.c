@@ -3,54 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   rays.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/03/02 14:33:48 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/02/25 17:04:13 by ael-mezz         ###   ########.fr       */
+/*   Created: 2020/03/03 08:12:25 by ael-mezz          #+#    #+#             */
+/*   Updated: 2021/01/22 17:25:04 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/cube3d.h"
 
-static  void    rays_init(t_ray *rays)
+static void			ft_init_ray(t_ray *ray)
 {
-	if (rays != NULL)
+	if (ray != NULL)
 	{
-		rays->length = 0;
-		rays->w_hit.x = 0.0F;
-		rays->w_hit.y = 0.0F;
-		rays->hit_hor = 0.0F;
-		rays->hit_ver = 0.0F;
-		rays->f_down = (rays->ang > 0 && rays->ang < M_PI);
-		rays->f_up = !rays->f_down;
-		rays->f_right = ((rays->ang < 0.5 * M_PI) || (rays->ang > 1.5 * M_PI));
-		rays->f_left = !rays->f_right;
+		ray->length = 0;
+		ray->w_hit.x = 0;
+		ray->w_hit.y = 0;
+		ray->hit_hor = 0;
+		ray->hit_ver = 0;
+		ray->r_down = (ray->angle > 0 && ray->angle < M_PI);
+		ray->r_up = !ray->r_down;
+		ray->r_right = ((ray->angle < 0.5 * M_PI) || (ray->angle > 1.5 * M_PI));
+		ray->r_left = !ray->r_right;
 	}
 }
 
-
-static t_grides     hor_intercept(t_ray *rays)
+static t_ray_data	ft_horizontal(t_ray *ray)
 {
-	t_grides hor;   
+	t_ray_data	hor;
 
 	hor.len = 1000000000;
-	hor.intercept.y = floorf(player.y / (float)TILE_SIZE) * (float)TILE_SIZE;
-	hor.intercept.y += (rays->f_down ? (float)TILE_SIZE : 0.0F);
-	hor.intercept.x = player.x + (hor.intercept.y - player.y) / tanf(rays->ang);
+	hor.inter.y = floorf(g_p.axis.y / (float)TILE_SIZE) * (float)TILE_SIZE;
+	hor.inter.y += (ray->r_down ? (float)TILE_SIZE : 0.0F);
+	hor.inter.x = g_p.axis.x + (hor.inter.y - g_p.axis.y) / tanf(ray->angle);
 	hor.step.y = (float)TILE_SIZE;
-	hor.step.y *= (rays->f_up ? -1.0F : 1.0F);
-	hor.step.x = (float)TILE_SIZE / tanf(rays->ang);
-	hor.step.x *= (rays->f_left && hor.step.x > 0.0F) ? -1.0F : 1.0F;
-	hor.step.x *= (rays->f_right && hor.step.x < 0.0F) ? -1.0F : 1.0F;
-	hor.hit.x = hor.intercept.x;
-	hor.hit.y = hor.intercept.y;
-	while (hor.hit.y >= 0.0F && hor.hit.y < (float)data.mapd_h
-			&& hor.hit.x >= 0.0F && hor.hit.x < (float)data.mapd_w)
+	hor.step.y *= (ray->r_up ? -1.0F : 1.0F);
+	hor.step.x = (float)TILE_SIZE / tanf(ray->angle);
+	hor.step.x *= (ray->r_left && hor.step.x > 0.0F) ? -1.0F : 1.0F;
+	hor.step.x *= (ray->r_right && hor.step.x < 0.0F) ? -1.0F : 1.0F;
+	hor.hit.x = hor.inter.x;
+	hor.hit.y = hor.inter.y;
+	while (hor.hit.y >= 0.0F && hor.hit.y < (float)g_data.m_dimens.h
+		&& hor.hit.x >= 0.0F && hor.hit.x < (float)g_data.m_dimens.w)
 	{
-		if (theres_wall(hor.hit.x, rays->f_up ? hor.hit.y - 1 : hor.hit.y))
+		if (ft_is_wall(hor.hit.x, ray->r_up ? hor.hit.y - 1 : hor.hit.y))
 		{
 			hor.len = distanceAB(hor.hit.x, hor.hit.y);
-			break;
+			break ;
 		}
 		hor.hit.x += hor.step.x;
 		hor.hit.y += hor.step.y;
@@ -58,28 +57,28 @@ static t_grides     hor_intercept(t_ray *rays)
 	return (hor);
 }
 
-static t_grides     ver_intercept(t_ray *rays)
+static t_ray_data	ft_vertical(t_ray *ray)
 {
-	t_grides ver;
+	t_ray_data	ver;
 
 	ver.len = 1000000000;
-	ver.intercept.x = floorf(player.x / (float)TILE_SIZE) * (float)TILE_SIZE;
-	ver.intercept.x += (rays->f_right ? (float)TILE_SIZE : 0.0F);
-	ver.intercept.y = player.y + (ver.intercept.x - player.x) * tanf(rays->ang);
+	ver.inter.x = floorf(g_p.axis.x / (float)TILE_SIZE) * (float)TILE_SIZE;
+	ver.inter.x += (ray->r_right ? (float)TILE_SIZE : 0.0F);
+	ver.inter.y = g_p.axis.y + (ver.inter.x - g_p.axis.x) * tanf(ray->angle);
 	ver.step.x = (float)TILE_SIZE;
-	ver.step.x *= (rays->f_left ? -1.0F : 1.0F);
-	ver.step.y = (float)TILE_SIZE * tanf(rays->ang);
-	ver.step.y *= (rays->f_up && ver.step.y > 0.0F) ? -1.0F : 1.0F;
-	ver.step.y *= (rays->f_down && ver.step.y < 0.0F) ? -1.0F : 1.0F;
-	ver.hit.x = ver.intercept.x;
-	ver.hit.y = ver.intercept.y;
-	while (ver.hit.y >= 0.0F && ver.hit.y < (float)data.mapd_h
-			&& ver.hit.x >= 0.0F && ver.hit.x < (float)data.mapd_w)
+	ver.step.x *= (ray->r_left ? -1.0F : 1.0F);
+	ver.step.y = (float)TILE_SIZE * tanf(ray->angle);
+	ver.step.y *= (ray->r_up && ver.step.y > 0.0F) ? -1.0F : 1.0F;
+	ver.step.y *= (ray->r_down && ver.step.y < 0.0F) ? -1.0F : 1.0F;
+	ver.hit.x = ver.inter.x;
+	ver.hit.y = ver.inter.y;
+	while (ver.hit.y >= 0.0F && ver.hit.y < (float)g_data.m_dimens.h
+		&& ver.hit.x >= 0.0F && ver.hit.x < (float)g_data.m_dimens.w)
 	{
-		if (theres_wall(rays->f_left ? ver.hit.x - 1 : ver.hit.x, ver.hit.y))
+		if (ft_is_wall(ray->r_left ? ver.hit.x - 1 : ver.hit.x, ver.hit.y))
 		{
 			ver.len = distanceAB(ver.hit.x, ver.hit.y);
-			break;
+			break ;
 		}
 		ver.hit.x += ver.step.x;
 		ver.hit.y += ver.step.y;
@@ -87,43 +86,44 @@ static t_grides     ver_intercept(t_ray *rays)
 	return (ver);
 }
 
-static void         longer_len(t_ray *rays)
+static void			ft_setup_ray(t_ray *ray)
 {
-	t_grides hor;
-	t_grides ver;
+	t_ray_data	hor;
+	t_ray_data	ver;
 
-	rays_init(rays);
-	hor = hor_intercept(rays);
-	ver = ver_intercept(rays);
+	ft_init_ray(ray);
+	hor = ft_horizontal(ray);
+	ver = ft_vertical(ray);
 	if (ver.len > hor.len)
 	{
-		rays->length = hor.len;
-		rays->hit_hor = 1;
-		rays->hit_ver = 0;
-		rays->w_hit.x = hor.hit.x;
-		rays->w_hit.y = hor.hit.y;
+		ray->length = hor.len;
+		ray->hit_hor = 1;
+		ray->hit_ver = 0;
+		ray->w_hit.x = hor.hit.x;
+		ray->w_hit.y = hor.hit.y;
 	}
 	else
 	{
-		rays->length = ver.len;
-		rays->hit_ver = 1;
-		rays->hit_hor = 0;
-		rays->w_hit.x = ver.hit.x;
-		rays->w_hit.y = ver.hit.y;
+		ray->length = ver.len;
+		ray->hit_ver = 1;
+		ray->hit_hor = 0;
+		ray->w_hit.x = ver.hit.x;
+		ray->w_hit.y = ver.hit.y;
 	}
 }
 
-void cast_rays()
+void				ft_rays(float x, float y, float angle)
 {
-	int     i;
-	float   angle;
+	int		i;
+	float	ang;
 
-	i = -1;
-	angle = player.ang - radian(FOV / 2);
-	while (++i <= data.window_width)
+	i = 0;
+	ang = angle - radian((float)(FOV / 2));
+	while (i < g_data.dimens.w)
 	{
-		g_rays[i].ang = norm_angle(angle);
-		longer_len(&g_rays[i]);
-		angle += radian(FOV) / data.window_width;
+		g_rays[i].angle = norm_angle(ang);
+		ft_setup_ray(&g_rays[i]);
+		ang += radian(g_data.ray_step);
+		++i;
 	}
 }

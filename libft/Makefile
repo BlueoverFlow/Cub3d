@@ -59,7 +59,8 @@ SRCS = 				srcs/ft_strcmp.c				\
 					srcs/ft_ptoa.c					\
 					srcs/ft_memalloc.c				\
 					srcs/get_next_line.c			\
-					srcs/get_next_line_utils.c
+					srcs/get_next_line_utils.c		\
+					srcs/other_functions.c			\
 
 
 OBJ_DIR = mv *.o srcs
