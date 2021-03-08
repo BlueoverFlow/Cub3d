@@ -12,25 +12,8 @@
 
 #include "../includes/cube3d.h"
 
-int     check_err()
-{
-    check_args();
-    if (open(file.file, O_RDONLY) < 0)
-        return (out("Error\ncan't find your \".cub\" file!\n"));
-	read_file();
-	check_elements();
-    return (1);
-}
 
-int		check_elements()
-{
-	handle_r();
-	texture_data();
-	handle_map();
-	return (1);
-}
-
-int     check_filename(char *ext)
+static	int     check_filename(char *ext)
 {
     int     len;
 
@@ -38,7 +21,7 @@ int     check_filename(char *ext)
 	return (ft_strcmp(&(file.file[len - 4]), ext) == 0 ? 0 : -1);
 }
 
-int     check_args()
+static	int     check_args()
 {
     if (file.argc < 2)
         return (out("Error\nAt least 1 argument is required!\n"));
@@ -50,5 +33,23 @@ int     check_args()
         file.screenshot = 1;
     else if (file.argc == 3)
         return (out("Error\ndo you mean \"--save\"?!\n"));
+    return (1);
+}
+
+static	int		check_elements()
+{
+	handle_r();
+	texture_data();
+	handle_map();
+	return (1);
+}
+
+int     check_err()
+{
+    check_args();
+    if (open(file.file, O_RDONLY) < 0)
+        return (out("Error\ncan't find your \".cub\" file!\n"));
+	read_file();
+	check_elements();
     return (1);
 }

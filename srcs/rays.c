@@ -12,7 +12,7 @@
 
 #include "../includes/cube3d.h"
 
-static void			ft_init_ray(t_ray *ray)
+static void			ray_init(t_ray *ray)
 {
 	if (ray != NULL)
 	{
@@ -28,9 +28,9 @@ static void			ft_init_ray(t_ray *ray)
 	}
 }
 
-static t_ray_data	ft_horizontal(t_ray *ray)
+static t_grides	ft_horizontal(t_ray *ray)
 {
-	t_ray_data	hor;
+	t_grides	hor;
 
 	hor.len = 1000000000;
 	hor.inter.y = floorf(g_player.pos.y / (float)TILE_SIZE) * (float)TILE_SIZE;
@@ -43,10 +43,10 @@ static t_ray_data	ft_horizontal(t_ray *ray)
 	hor.step.x *= (ray->r_right && hor.step.x < 0.0F) ? -1.0F : 1.0F;
 	hor.hit.x = hor.inter.x;
 	hor.hit.y = hor.inter.y;
-	while (hor.hit.y >= 0.0F && hor.hit.y < (float)g_cube.map.h
-		&& hor.hit.x >= 0.0F && hor.hit.x < (float)g_cube.map.w)
+	while (hor.hit.y >= 0.0F && hor.hit.y < (float)g_cube.map_size.h
+		&& hor.hit.x >= 0.0F && hor.hit.x < (float)g_cube.map_size.w)
 	{
-		if (is_wall(hor.hit.x, ray->r_up ? hor.hit.y - 1 : hor.hit.y))
+		if (theres_wall(hor.hit.x, ray->r_up ? hor.hit.y - 1 : hor.hit.y))
 		{
 			hor.len = distanceAB(hor.hit.x, hor.hit.y);
 			break ;
@@ -57,9 +57,9 @@ static t_ray_data	ft_horizontal(t_ray *ray)
 	return (hor);
 }
 
-static t_ray_data	ft_vertical(t_ray *ray)
+static t_grides	ft_vertical(t_ray *ray)
 {
-	t_ray_data	ver;
+	t_grides	ver;
 
 	ver.len = 1000000000;
 	ver.inter.x = floorf(g_player.pos.x / (float)TILE_SIZE) * (float)TILE_SIZE;
@@ -72,10 +72,10 @@ static t_ray_data	ft_vertical(t_ray *ray)
 	ver.step.y *= (ray->r_down && ver.step.y < 0.0F) ? -1.0F : 1.0F;
 	ver.hit.x = ver.inter.x;
 	ver.hit.y = ver.inter.y;
-	while (ver.hit.y >= 0.0F && ver.hit.y < (float)g_cube.map.h
-		&& ver.hit.x >= 0.0F && ver.hit.x < (float)g_cube.map.w)
+	while (ver.hit.y >= 0.0F && ver.hit.y < (float)g_cube.map_size.h
+		&& ver.hit.x >= 0.0F && ver.hit.x < (float)g_cube.map_size.w)
 	{
-		if (is_wall(ray->r_left ? ver.hit.x - 1 : ver.hit.x, ver.hit.y))
+		if (theres_wall(ray->r_left ? ver.hit.x - 1 : ver.hit.x, ver.hit.y))
 		{
 			ver.len = distanceAB(ver.hit.x, ver.hit.y);
 			break ;
@@ -86,12 +86,12 @@ static t_ray_data	ft_vertical(t_ray *ray)
 	return (ver);
 }
 
-static void			ft_setup_ray(t_ray *ray)
+static void		longer_ray(t_ray *ray)
 {
-	t_ray_data	hor;
-	t_ray_data	ver;
+	t_grides	hor;
+	t_grides	ver;
 
-	ft_init_ray(ray);
+	ray_init(ray);
 	hor = ft_horizontal(ray);
 	ver = ft_vertical(ray);
 	if (ver.len > hor.len)
@@ -112,17 +112,17 @@ static void			ft_setup_ray(t_ray *ray)
 	}
 }
 
-void				cast_rays(float x, float y, float angle)
+void				cast_rays()
 {
 	int		i;
 	float	ang;
 
 	i = 0;
-	ang = angle - radian((float)(FOV / 2));
-	while (i < g_cube.window.w)
+	ang = g_player.rot_ang - radian((float)(FOV / 2));
+	while (i < g_cube.dimens.w)
 	{
 		g_rays[i].angle = norm_angle(ang);
-		ft_setup_ray(&g_rays[i]);
+		longer_ray(&g_rays[i]);
 		ang += radian(g_cube.ratio);
 		++i;
 	}

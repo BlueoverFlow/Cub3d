@@ -31,35 +31,46 @@ typedef struct	s_dim
 	float		y;
 }               t_dim;
 
-typedef struct  s_ray
+typedef struct	s_ray
 {
-    float   length;
-    float   ang;
-    int     f_left;
-    int     f_right;
-    int     f_down;
-    int     f_up;
-    t_dim   w_hit;
-    int     hit_ver;
-    int     hit_hor;
-}               t_ray;
+	float		length;
+	float		angle;
+	int			r_left;
+	int			r_right;
+	int			r_up;
+	int			r_down;
+	t_dim		w_hit;
+	int			hit_ver;
+	int			hit_hor;
+}				t_ray;
 
-typedef struct s_grides
+typedef struct	s_player
 {
-    t_dim      hit;
-    t_dim      intercept;
-    t_dim      step;
-    float       len;
-}               t_grides;
+    t_dim		pos;
+    int			turn_direct;
+    int			move_direct;
+    float		rot_ang;
+    float		side_ang;
+    float		move_speed;
+    float		rot_speed;
+}				t_player;
 
-typedef struct  s_wall
+typedef struct	s_grides
 {
-    float   top;
-    float   bottom;
-    float   height;
-    float   distance;
-    float   corr_len;
-}               t_wall;
+	t_dim		hit;
+	t_dim		inter;
+	t_dim		step;
+	float		len;
+}				t_grides;
+
+typedef struct	s_wall
+{
+	float		top;
+	float		bottom;
+	float		hieght;
+	float		pp_dist;
+	float		corr_len;
+}				t_wall;
 
 typedef struct s_file
 {
@@ -71,32 +82,18 @@ typedef struct s_file
     int     map_pos;
 }           t_file;
 
-typedef struct s_cube
+typedef struct  s_cube
 {
-	t_dim	window;
-	t_dim	map_size;
-	t_dim	map;
-	float	ratio;
-    char    **map;
-    char    **world;
-    void    *win_ptr;
-    void    *mlx_ptr;
-}           t_cube;
+	t_dim    	dimens;
+	t_dim    	map_size;
+	char        **map;
+	char		**world;
+	int         rows;
+	int         cols;
+	float       ratio;
+}               t_cube;
 
-typedef struct	s_player
-{
-	t_dim		pos;
-    float		ang;
-    int			move_directionion;
-    float		rot_ang;
-    float		side_ang;
-    float     	direction;
-    float		move_speed;
-    float		rot_speed;
-	int			is_pressed;
-}				t_player;
-
-typedef struct	s_texture
+typedef struct 	s_texture
 {
 	char		*north;
 	char		*west;
@@ -106,24 +103,23 @@ typedef struct	s_texture
 
 typedef struct s_image
 {
+	void	*img;
+	int		*addr;
 	int     bits_per_pixel;
 	int     line_lenght;
 	int     endian;
-	void	*img;
-	int		*addr;
 }               t_image;
 
-t_image			g_img;
-t_player		g_p;
-t_texture		g_texture;
-t_cube			g_cube;
+t_player		g_player;
+t_cube          g_cube;
 t_ray			*g_rays;
 t_file			file;
-t_dim			g_dimd[10];
-t_image			g_imgd[10];
+t_texture		g_texture;
+t_image			g_img[5];
+t_dim        	g_dim[4];
 char			*g_fname;
-void			*g_cube.mlx_ptr;
-void			*g_cube.win_ptr;
+void			*g_mlx;
+void			*g_win;
 void			*g_draw_n;
 void			*g_draw_s;
 void			*g_draw_w;
@@ -133,40 +129,28 @@ int				*g_south;
 int				*g_west;
 int				*g_east;
 
-void			sub_init();
-int				render();
-void			draw_wall(int wall_top, int wall_bottom, int wall_height, int index);
-void			cast_rays(float x, float y, float angle);
-void			cast_walls();
-int				ft_key_pressed(int key);
-int				ft_key_released(int key);
-int				is_wall(float x, float y);
-float			radian(float angle);
-float       	distanceAB(float Ax, float Ay);
-float      		norm_angle(float angle);
-int				supreme_init(int argc, char **argv);
-void 			var_init();
-void            texture_init();
-void            player_init();
-int				check_err();
-int				check_elements();
-int				check_filename(char *ext);
-int				check_args();
-char			**find_id(char	*id);
-int				handle_r();
-int				handle_map();
-int				map_parsing(int k, int j);
-int				texture_data();
-int				out(char *error_msg);
-void			read_file();
-void			read_elements();
-void			the9th_elem(char *line, int fd);
-void			read_map();
-void			get_mapsize();
-void			get_world();
-unsigned int	get_color(int r, int g, int b);
-int				exit_game();
-int				find_p();
-int				charactere(int y, int x);
+void				texture_walls();
+void				cast_rays();
+void				cast_walls();
+int					render_();
+void				player_init();
+int					ft_key_pressed(int key);
+int					ft_key_released(int key);
+int					theres_wall(float x, float y);
+float				radian(float angle);
+float			 	distanceAB(float Ax, float Ay);
+float				norm_angle(float angle);
+int					supreme_init(int argc, char **argv);
+int					check_err();
+int					handle_r();
+int					handle_map();
+int					texture_data();
+int					out(char *error_msg);
+void				read_file();
+void				read_map();
+void				move_player();
+int					find_p();
+void				get_world();
+unsigned int		get_color(int r, int g, int b);
 
 #endif

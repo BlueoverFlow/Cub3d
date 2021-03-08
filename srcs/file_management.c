@@ -12,14 +12,36 @@
 
 #include "../includes/cube3d.h"
 
-void	read_file()
+static	void	the9th_elem(char *line, int fd)
 {
-	read_elements();
-	read_map();
-	get_mapsize();
+	char    **check;
+	char	**tmp;
+	int     *i;
+	int     r;
+
+	while (get_next_line(fd, &line) > 0)
+	{
+		check = ft_split(line, ' ');
+		if (*check)
+		{
+			if (**check == '1' || **check == '0' || ** check == '2')
+			{
+				g_cube.rows++;
+				while (get_next_line(fd, &line) > 0)
+				{
+					g_cube.rows++;
+					free(line);
+				}
+				break;
+			}
+		}
+		file.map_pos++;
+		free(line);
+	}
+	close (fd);
 }
 
-void	read_elements()
+static void	read_elements()
 {
 	char    *line;
 	int     fd;
@@ -45,60 +67,29 @@ void	read_elements()
 	the9th_elem(line, fd);
 }
 
-void	the9th_elem(char *line, int fd)
+static	void	get_mapwidth()
 {
-	char    **check;
-	char	**tmp;
-	int     *i;
-	int     r;
+	int w[g_cube.rows];
+	int len;
+	int j;
+	int k;
 
-	while (get_next_line(fd, &line) > 0)
-	{
-		check = ft_split(line, ' ');
-		if (*check)
-		{
-			if (**check == '1' || **check == '0' || ** check == '2')
-			{
-				g_cube.map_size.y++;
-				while (get_next_line(fd, &line) > 0)
-				{
-					g_cube.map_size.y++;
-					free(line);
-				}
-				break;
-			}
-		}
-		file.map_pos++;
-		free(line);
-	}
-	close (fd);
-}
-
-void	read_map()
-{
-	char    *line;
-	int     fd;
-	int     j;
-
+	k = g_cube.rows + 1;
 	j = 0;
-	if (g_cube.map_size.y > 0)
+	len = (int )ft_strlen(g_cube.world[j]);
+	while (--k)
 	{
-		g_cube.world = malloc((sizeof(char *) * g_cube.map_size.y) + 1);
-		g_cube.world[g_cube.map_size.y] = NULL;
-	}
-	fd = open(file.file, O_RDONLY);
-	while (--file.map_pos)
-	{
-		get_next_line(fd, &line);
-		free(line);
-	}
-	while (get_next_line(fd, &line) > 0)
-	{
-		g_cube.world[j] = ft_strdup(line);
-		free(line);
+		w[j] = (int )ft_strlen(g_cube.world[j]);
+		if (len <= w[j])
+			len = w[j];
 		j++;
 	}
-	g_cube.world[j] = ft_strdup(line);
-	free(line);
-	close (fd);
+	g_cube.cols = len;
+}
+
+void	read_file()
+{
+	read_elements();
+	read_map();
+	get_mapwidth();
 }

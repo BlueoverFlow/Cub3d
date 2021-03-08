@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   g_player..c                                           :+:      :+:    :+:   */
+/*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,27 +12,56 @@
 
 #include "../includes/cube3d.h"
 
-void	texture_init()
+void		move_player()
 {
-	player_init():
-	g_draw_n = mlx_xpm_file_to_image(g_cube.mlx_ptr, g_texture.north, &g_dimd[0].w, &g_dimd[0].h);
-	g_north = (int *)mlx_get_data_addr(g_draw_n, &g_imgd[2].bits_per_pixel, &g_imgd[2].size_line, &g_imgd[2].endian);
-	g_draw_s = mlx_xpm_file_to_image(g_cube.mlx_ptr, g_texture.south,  &g_dimd[1].w, &g_dimd[1].h);
-	g_south = (int *)mlx_get_data_addr(g_draw_s, &g_imgd[10].bits_per_pixel, &g_imgd[3].size_line, &g_imgd[3].endian);
-	g_draw_w = mlx_xpm_file_to_image(g_cube.mlx_ptr, g_texture.west, &g_dimd[2].w, &g_dimd[2].h);
-	g_west = (int *)mlx_get_data_addr(g_draw_w, &g_imgd[4].bits_per_pixel, &g_imgd[4].size_line, &g_imgd[4].endian);
-	g_draw_e = mlx_xpm_file_to_image(g_cube.mlx_ptr, g_texture.east,  &g_dimd[3].w, &g_dimd[3].h);
-	g_east = (int *)mlx_get_data_addr(g_draw_e, &g_imgd[5].bits_per_pixel, &g_imgd[5].size_line, &g_imgd[5].endian);
-	cast_rays();
-	cast_walls();
+	t_dim	next;
+
+	next.x = g_player.pos.x + g_player.move_speed * g_player.move_direct * cosf(g_player.rot_ang + g_player.side_ang);
+	next.y = g_player.pos.y + g_player.move_speed * g_player.move_direct * sinf(g_player.rot_ang + g_player.side_ang);
+	g_player.rot_ang = norm_angle((g_player.rot_ang + g_player.rot_speed * g_player.turn_direct));
+	if (!theres_wall(next.x, g_player.pos.y))
+		g_player.pos.x = next.x;
+	if (!theres_wall(g_player.pos.x, next.y))
+		g_player.pos.y = next.y;
 }
 
-void	player_init()
+static	int    charactere(int y, int x)
 {
-	g_player.is_pressed = 0;
-	g_player.turn_direct = 0;
-	g_player.move_direction = 0;
-	g_player.move_speed = (float)INIT_MOVE_SPD;
-	g_player.rot_speed = radian((float)INIT_ROT_SPD);
-	g_player.side_ang = radian(0);
+	if (g_cube.map[y][x] == 'N')
+		g_player.rot_ang = radian(270);
+	else if (g_cube.map[y][x] == 'W')
+		g_player.rot_ang = radian(180);
+	else if (g_cube.map[y][x] == 'S')
+		g_player.rot_ang = radian(90);
+	else if (g_cube.map[y][x] == 'E')
+		g_player.rot_ang = radian(0);
+	else
+		return (0);
+	g_player.pos.x = (x * TILE_SIZE + (TILE_SIZE / 2));
+	g_player.pos.y = (y * TILE_SIZE + (TILE_SIZE / 2));
+	return (1);
+}
+
+int    find_p()
+{
+	int	p;
+	int x;
+	int	y;
+
+	p = 0;
+	y = 0;
+	while (g_cube.map[y])
+	{
+		x = 0;
+		while (g_cube.map[y][x])
+		{
+			if (charactere(y, x))
+				p++;
+			x++;
+		}
+		y++;
+    }
+	if (p == 0)
+		return (out("Error\nNo player found!\n"));
+	return (p == 1 ? 1 : out("Error\ntoo many players!\n"));
 }

@@ -14,16 +14,17 @@ NAME = libft/libft.a
 
 FLAGS =
 
-SRCS = 	__main__.c			\
-		elements_handling.c	\
-		error_management.c	\
-		file_management.c	\
-		file_management2.c	\
-		game.c				\
-		initiate_all.c		\
-		player.c			\
-		rays.c				\
-		utils1.c			\
+SRCS = 	__main__.c				\
+		elements_handling.c		\
+		elements_handling2.c	\
+		error_management.c		\
+		file_management.c		\
+		file_management2.c		\
+		game.c					\
+		initiate_all.c			\
+		player.c				\
+		rays.c					\
+		utils1.c				\
 		walls.c
 
 

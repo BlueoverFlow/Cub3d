@@ -12,35 +12,21 @@
 
 #include "../includes/cube3d.h"
 
-void			cast_walls(void)
+void			texture_walls()
 {
-	int			i;
-	int			j;
-	t_wall_data	wall;
-
-	wall.pp_dist = ((float)g_cube.window.w / 2.0F) / tanf(radian((FOV / 2)));
-	i = 0;
-	while (i < g_cube.window.w)
-	{
-		wall.corr_len = g_rays[i].length * cosf(g_rays[i].angle - g_player.rot_ang);
-		wall.hieght = (float)TILE_SIZE / wall.corr_len * (float)wall.pp_dist;
-		wall.top = ((float)g_cube.window.h / 2.0F) - (wall.hieght / 2.0F);
-		wall.top = wall.top < 0 ? 0 : wall.top;
-		wall.bottom = ((float)g_cube.window.h / 2.0F) + (wall.hieght / 2.0F);
-		wall.bottom = wall.bottom > g_cube.window.h ? g_cube.window.h : wall.bottom;
-		j = 0;
-		while (j < wall.top)
-			g_img.addr[(j++ * g_cube.window.w) + i] = get_color(0,255,255);
-		j = wall.bottom;
-		while (j < g_cube.window.h)
-			g_img.addr[(j++ * g_cube.window.w) + i] = get_color(255,0,0);
-		draw_wall(wall.top, wall.bottom, wall.hieght, i);
-		++i;
-	}
-	mlx_put_image_to_window(g_cube.mlx_ptr, g_cube.win_ptr, g_img.img, 0, 0);
+	g_draw_n = mlx_xpm_file_to_image(g_mlx, g_texture.north, &g_dim[0].w, &g_dim[0].h);
+	g_north = (int *)mlx_get_data_addr(g_draw_n, &g_img[1].bits_per_pixel, &g_img[1].line_lenght, &g_img[1].endian);
+	g_draw_s = mlx_xpm_file_to_image(g_mlx, g_texture.south,  &g_dim[1].w, &g_dim[1].h);
+	g_south = (int *)mlx_get_data_addr(g_draw_s, &g_img[2].bits_per_pixel, &g_img[2].line_lenght, &g_img[2].endian);
+	g_draw_w = mlx_xpm_file_to_image(g_mlx, g_texture.west, &g_dim[2].w, &g_dim[2].h);
+	g_west = (int *)mlx_get_data_addr(g_draw_w, &g_img[3].bits_per_pixel, &g_img[3].line_lenght, &g_img[3].endian);
+	g_draw_e = mlx_xpm_file_to_image(g_mlx, g_texture.east,  &g_dim[3].w, &g_dim[3].h);
+	g_east = (int *)mlx_get_data_addr(g_draw_e, &g_img[4].bits_per_pixel, &g_img[4].line_lenght, &g_img[4].endian);
+	cast_rays();
+	cast_walls();
 }
 
-void			draw_wall(int w_top, int w_bottom, int w_height, int index)
+static	void			draw_wall(int w_top, int w_bottom, int w_height, int index)
 {
 	int j;
 	int offset_x;
@@ -54,17 +40,45 @@ void			draw_wall(int w_top, int w_bottom, int w_height, int index)
 	j = w_top;
 	while (j < w_bottom)
 	{
-		offset_y = (j + ((w_height / 2) - (g_cube.window.h / 2))) *
-			((float)g_dimd[0].h / (float)w_height);
+		offset_y = (j + ((w_height / 2) - (g_cube.dimens.h / 2))) *
+			((float)g_dim[0].h / (float)w_height);
 		if (g_rays[index].hit_hor && g_rays[index].r_up)
-			color = g_north[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_north[(offset_y * g_dim[0].h) + offset_x];
 		else if (g_rays[index].hit_hor && g_rays[index].r_down)
-			color = g_south[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_south[(offset_y * g_dim[0].h) + offset_x];
 		else if (g_rays[index].hit_ver && g_rays[index].r_left)
-			color = g_west[(offset_y * g_dimd[0].h) + offset_x];
+			color = g_west[(offset_y * g_dim[0].h) + offset_x];
 		else if (g_rays[index].hit_ver && g_rays[index].r_right)
-			color = g_east[(offset_y * g_dimd[0].h) + offset_x];
-		g_img.addr[(j * g_cube.window.w) + index] = color;
+			color = g_east[(offset_y * g_dim[0].h) + offset_x];
+		g_img[0].addr[(j * g_cube.dimens.w) + index] = color;
 		++j;
 	}
+}
+
+void			cast_walls()
+{
+	int			i;
+	int			j;
+	t_wall	wall;
+
+	wall.pp_dist = ((float)g_cube.dimens.w / 2.0F) / tanf(radian((FOV / 2)));
+	i = 0;
+	while (i < g_cube.dimens.w)
+	{
+		wall.corr_len = g_rays[i].length * cosf(g_rays[i].angle - g_player.rot_ang);
+		wall.hieght = (float)TILE_SIZE / wall.corr_len * (float)wall.pp_dist;
+		wall.top = ((float)g_cube.dimens.h / 2.0F) - (wall.hieght / 2.0F);
+		wall.top = wall.top < 0 ? 0 : wall.top;
+		wall.bottom = ((float)g_cube.dimens.h / 2.0F) + (wall.hieght / 2.0F);
+		wall.bottom = wall.bottom > g_cube.dimens.h ? g_cube.dimens.h : wall.bottom;
+		j = 0;
+		while (j < wall.top)
+			g_img[0].addr[(j++ * g_cube.dimens.w) + i] = get_color(0,255,255);
+		j = wall.bottom;
+		while (j < g_cube.dimens.h)
+			g_img[0].addr[(j++ * g_cube.dimens.w) + i] = get_color(255,0,0);
+		draw_wall(wall.top, wall.bottom, wall.hieght, i);
+		++i;
+	}
+	mlx_put_image_to_window(g_mlx, g_win, g_img[0].img, 0, 0);
 }
