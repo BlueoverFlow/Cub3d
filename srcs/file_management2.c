@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_management2.c                                 :+:      :+:    :+:   */
+/*   g_file_management2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-mezz <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -46,8 +46,8 @@ void	read_map()
 		g_cube.world = malloc((sizeof(char *) * g_cube.rows) + 1);
 		g_cube.world[g_cube.rows] = NULL;
 	}
-	fd = open(file.file, O_RDONLY);
-	while (--file.map_pos)
+	fd = open(g_file.file, O_RDONLY);
+	while (--g_file.map_pos)
 	{
 		get_next_line(fd, &line);
 		free(line);

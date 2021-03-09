@@ -12,15 +12,15 @@
 
 #include "../includes/cube3d.h"
 
-static	char	**find_id(char	*id)
+char	**find_id(char	*id)
 {
 	char	**data;
 	int		i;
 
 	i = 0;
-	while (file.elem[i])
+	while (g_file.elem[i])
 	{
-		data = ft_split(file.elem[i], ' ');
+		data = ft_split(g_file.elem[i], ' ');
 		if (ft_strcmp(data[0], id) == 0)
 			return (data);
 		i++;

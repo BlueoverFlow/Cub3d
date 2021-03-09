@@ -21,7 +21,7 @@
 # define FOV 60
 # define INIT_MOVE_SPD ((float)TILE_SIZE / (float)10)
 # define INIT_ROT_SPD (g_cube.ratio * 30)
-# define GAME_TITLE "Cub3D"
+# define GAME_header "Cub3D"
 
 typedef struct	s_dim
 {
@@ -67,29 +67,57 @@ typedef struct	s_wall
 {
 	float		top;
 	float		bottom;
-	float		hieght;
-	float		pp_dist;
+	float		distance;
 	float		corr_len;
+	float		height;
 }				t_wall;
 
 typedef struct s_file
 {
-    char    *file;
-    char    **argv;
-    int     argc;
-    char    **elem;
-    int     screenshot;
-    int     map_pos;
+    char    		*file;
+    char    		**argv;
+    int     		argc;
+    char    		**elem;
+    int				screenshot;
+	unsigned int	bits_perpixel;
+    int     		map_pos;
+	unsigned char	*screen;
+	unsigned char	header[54];
+	unsigned int	size;
+	unsigned char	planes;
+	unsigned int	pixel_data_offset;
+	unsigned int	header_size;
+	unsigned int	image_size;
+	int	row_bytes;
+
 }           t_file;
+
+typedef struct	s_bmp
+{
+	unsigned char	*buffer;
+	unsigned char	header[54];
+	unsigned char	planes;
+	unsigned int	file_size;
+	unsigned int	pixel_data_offset;
+	unsigned int	header_size;
+	unsigned int	bits_ppixel;
+	unsigned int	image_size;
+	int				row_bytes;
+}				t_bmp;
 
 typedef struct  s_cube
 {
 	t_dim    	dimens;
 	t_dim    	map_size;
+	t_dim		dim;
+	void		*mlx_ptr;
+	void		*win_ptr;
 	char        **map;
 	char		**world;
 	int         rows;
 	int         cols;
+	int			floor[4];
+	int			ceilling[4];
 	float       ratio;
 }               t_cube;
 
@@ -110,16 +138,20 @@ typedef struct s_image
 	int     endian;
 }               t_image;
 
+typedef struct sprite
+{
+	int	n_sprite;
+}				t_sprite;
+
 t_player		g_player;
 t_cube          g_cube;
 t_ray			*g_rays;
-t_file			file;
+t_file			g_file;
 t_texture		g_texture;
 t_image			g_img[5];
 t_dim        	g_dim[4];
+t_sprite		g_sprite;
 char			*g_fname;
-void			*g_mlx;
-void			*g_win;
 void			*g_draw_n;
 void			*g_draw_s;
 void			*g_draw_w;
@@ -152,5 +184,9 @@ void				move_player();
 int					find_p();
 void				get_world();
 unsigned int		get_color(int r, int g, int b);
+char				**find_id(char	*id);
+int					handle_F_C();
+int					exit_game();
+void				take_screenshot();
 
 #endif

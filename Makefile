@@ -24,6 +24,7 @@ SRCS = 	__main__.c				\
 		initiate_all.c			\
 		player.c				\
 		rays.c					\
+		screenshot.c			\
 		utils1.c				\
 		walls.c
 

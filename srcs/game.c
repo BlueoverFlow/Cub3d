@@ -32,6 +32,8 @@ int				ft_key_pressed(int key)
 		g_player.move_direct = 1;
 		g_player.side_ang = radian(90);
 	}
+	if (key == 53)
+		exit_game();
 	return (0);
 }
 
@@ -65,6 +67,7 @@ int		render_()
 	{
 		cast_rays();
 		cast_walls();
+		
 	}
 	return (0);
 }

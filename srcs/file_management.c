@@ -35,7 +35,7 @@ static	void	the9th_elem(char *line, int fd)
 				break;
 			}
 		}
-		file.map_pos++;
+		g_file.map_pos++;
 		free(line);
 	}
 	close (fd);
@@ -48,17 +48,17 @@ static void	read_elements()
 	int     i;
 
 	i = 0;
-	fd = open(file.file, O_RDONLY);
+	fd = open(g_file.file, O_RDONLY);
 	while (i < 8)
 	{
 		if (get_next_line(fd, &line) > 0)
 		{ 
 			if ((ft_split(line, ' ')) && *line != '\0' && *line != '\n')
 			{
-				file.elem[i] = ft_strdup(line);
+				g_file.elem[i] = ft_strdup(line);
 				i++;
 			}
-			file.map_pos++;
+			g_file.map_pos++;
 			free(line);
 		}
 		else
